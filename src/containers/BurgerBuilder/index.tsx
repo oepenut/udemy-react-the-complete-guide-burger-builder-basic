@@ -2,9 +2,9 @@ import React, { useReducer } from 'react';
 import { IngredientsReducerActions } from 'utils/constanst';
 import Ingredient from 'components/Ingredient';
 import BuildControls from 'components/BuildControls';
-import Styles from './BurguerBuilder.module.css';
+import Styles from './BurgerBuilder.module.css';
 
-type BurguerIngredients = {
+type BurgerIngredients = {
   topBread: number;
   salad: number;
   bacon: number;
@@ -14,7 +14,7 @@ type BurguerIngredients = {
 };
 
 const Index = () => {
-  const burguerIngredients: BurguerIngredients = {
+  const burgerIngredients: BurgerIngredients = {
     topBread: 1,
     salad: 0,
     bacon: 0,
@@ -24,9 +24,9 @@ const Index = () => {
   };
 
   const ingredientsReducer = (
-    state: BurguerIngredients,
+    state: BurgerIngredients,
     action: { type: IngredientsReducerActions }
-  ): BurguerIngredients => {
+  ): BurgerIngredients => {
     const { salad, bacon, cheese, meat } = state;
 
     switch (action.type) {
@@ -53,18 +53,18 @@ const Index = () => {
     }
   };
 
-  const [state, dispatch] = useReducer(ingredientsReducer, burguerIngredients);
+  const [state, dispatch] = useReducer(ingredientsReducer, burgerIngredients);
 
   const getProperty = <T, K extends keyof T>(
     object: T,
     propertyName: K
   ): T[K] => {
-    return object[propertyName]; // o[propertyName] is of type T[K]
+    return object[propertyName];
   };
 
   const ingredientsArray = Object.keys(state).map((ingredient) => {
     return [
-      ...Array(getProperty(state, ingredient as keyof BurguerIngredients)),
+      ...Array(getProperty(state, ingredient as keyof BurgerIngredients)),
     ].map((_, index) => {
       return (
         <Ingredient key={ingredient + index} ingredientType={ingredient} />
