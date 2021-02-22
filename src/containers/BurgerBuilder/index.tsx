@@ -33,20 +33,20 @@ const Index = () => {
       case IngredientsReducerActions.ADD_SALAD:
         return { ...state, salad: salad + 1 };
       case IngredientsReducerActions.REMOVE_SALAD:
-        return salad > 1 ? { ...state, salad: salad - 1 } : state;
+        return salad >= 1 ? { ...state, salad: salad - 1 } : state;
       case IngredientsReducerActions.ADD_BACON:
         return { ...state, bacon: bacon + 1 };
       case IngredientsReducerActions.REMOVE_BACON:
-        return bacon > 1 ? { ...state, bacon: bacon - 1 } : state;
+        return bacon >= 1 ? { ...state, bacon: bacon - 1 } : state;
       case IngredientsReducerActions.ADD_CHEESE:
         return { ...state, cheese: cheese + 1 };
       case IngredientsReducerActions.REMOVE_CHEESE:
-        return cheese > 1 ? { ...state, cheese: cheese - 1 } : state;
+        return cheese >= 1 ? { ...state, cheese: cheese - 1 } : state;
 
       case IngredientsReducerActions.ADD_MEAT:
         return { ...state, meat: meat + 1 };
       case IngredientsReducerActions.REMOVE_MEAT:
-        return meat > 1 ? { ...state, meat: meat - 1 } : state;
+        return meat >= 1 ? { ...state, meat: meat - 1 } : state;
 
       default:
         return state;
