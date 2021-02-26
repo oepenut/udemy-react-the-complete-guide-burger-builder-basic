@@ -1,20 +1,14 @@
 import React, { useReducer } from 'react';
-import { IngredientsReducerActions } from 'utils/constanst';
+import { IngredientsPrices, IngredientsReducerActions } from 'utils/constanst';
+import { BurgerIngredients, Order, DisabledInfo } from 'types/types';
 import Ingredient from 'components/Ingredient';
 import BuildControls from 'components/BuildControls';
+import Modal from 'components/UI/Modal';
+import OrderSummary from 'components/OrderSummary';
 import Styles from './BurgerBuilder.module.css';
 
-type BurgerIngredients = {
-  topBread: number;
-  salad: number;
-  bacon: number;
-  cheese: number;
-  meat: number;
-  bottomBread: number;
-};
-
 const Index = () => {
-  const burgerIngredients: BurgerIngredients = {
+  const initialBurgerIngredients: BurgerIngredients = {
     topBread: 1,
     salad: 0,
     bacon: 0,
@@ -23,37 +17,82 @@ const Index = () => {
     bottomBread: 1,
   };
 
+  const initialOrderState: Order = {
+    burgerIngredients: initialBurgerIngredients,
+    totalPrice: 3,
+  };
+
   const ingredientsReducer = (
-    state: BurgerIngredients,
+    state: Order,
     action: { type: IngredientsReducerActions }
-  ): BurgerIngredients => {
-    const { salad, bacon, cheese, meat } = state;
+  ): Order => {
+    const { burgerIngredients, totalPrice } = state;
+    const { salad, bacon, cheese, meat } = burgerIngredients;
 
     switch (action.type) {
       case IngredientsReducerActions.ADD_SALAD:
-        return { ...state, salad: salad + 1 };
+        return {
+          ...state,
+          burgerIngredients: { ...burgerIngredients, salad: salad + 1 },
+          totalPrice: totalPrice + IngredientsPrices.salad,
+        };
       case IngredientsReducerActions.REMOVE_SALAD:
-        return salad >= 1 ? { ...state, salad: salad - 1 } : state;
+        return salad >= 1
+          ? {
+              ...state,
+              burgerIngredients: { ...burgerIngredients, salad: salad - 1 },
+              totalPrice: totalPrice - IngredientsPrices.salad,
+            }
+          : state;
       case IngredientsReducerActions.ADD_BACON:
-        return { ...state, bacon: bacon + 1 };
+        return {
+          ...state,
+          burgerIngredients: { ...burgerIngredients, bacon: bacon + 1 },
+          totalPrice: totalPrice + IngredientsPrices.bacon,
+        };
       case IngredientsReducerActions.REMOVE_BACON:
-        return bacon >= 1 ? { ...state, bacon: bacon - 1 } : state;
+        return bacon >= 1
+          ? {
+              ...state,
+              burgerIngredients: { ...burgerIngredients, bacon: bacon - 1 },
+              totalPrice: totalPrice - IngredientsPrices.bacon,
+            }
+          : state;
       case IngredientsReducerActions.ADD_CHEESE:
-        return { ...state, cheese: cheese + 1 };
+        return {
+          ...state,
+          burgerIngredients: { ...burgerIngredients, cheese: cheese + 1 },
+          totalPrice: totalPrice + IngredientsPrices.cheese,
+        };
       case IngredientsReducerActions.REMOVE_CHEESE:
-        return cheese >= 1 ? { ...state, cheese: cheese - 1 } : state;
-
+        return cheese >= 1
+          ? {
+              ...state,
+              burgerIngredients: { ...burgerIngredients, cheese: cheese - 1 },
+              totalPrice: totalPrice - IngredientsPrices.cheese,
+            }
+          : state;
       case IngredientsReducerActions.ADD_MEAT:
-        return { ...state, meat: meat + 1 };
+        return {
+          ...state,
+          burgerIngredients: { ...burgerIngredients, meat: meat + 1 },
+          totalPrice: totalPrice + IngredientsPrices.meat,
+        };
       case IngredientsReducerActions.REMOVE_MEAT:
-        return meat >= 1 ? { ...state, meat: meat - 1 } : state;
+        return meat >= 1
+          ? {
+              ...state,
+              burgerIngredients: { ...burgerIngredients, meat: meat - 1 },
+              totalPrice: totalPrice - IngredientsPrices.meat,
+            }
+          : state;
 
       default:
         return state;
     }
   };
 
-  const [state, dispatch] = useReducer(ingredientsReducer, burgerIngredients);
+  const [state, dispatch] = useReducer(ingredientsReducer, initialOrderState);
 
   const getProperty = <T, K extends keyof T>(
     object: T,
@@ -62,20 +101,46 @@ const Index = () => {
     return object[propertyName];
   };
 
-  const ingredientsArray = Object.keys(state).map((ingredient) => {
-    return [
-      ...Array(getProperty(state, ingredient as keyof BurgerIngredients)),
-    ].map((_, index) => {
-      return (
-        <Ingredient key={ingredient + index} ingredientType={ingredient} />
-      );
-    });
-  });
+  const ingredientsArray = Object.keys(state.burgerIngredients).map(
+    (ingredient) => {
+      return [
+        ...Array(
+          getProperty(
+            state.burgerIngredients,
+            ingredient as keyof BurgerIngredients
+          )
+        ),
+      ].map((_, index) => {
+        return (
+          <Ingredient key={ingredient + index} ingredientType={ingredient} />
+        );
+      });
+    }
+  );
+
+  let disabledInfo = {
+    salad: true,
+    bacon: true,
+    cheese: true,
+    meat: true,
+  };
+
+  for (let key in disabledInfo) {
+    disabledInfo[key as keyof DisabledInfo] =
+      state.burgerIngredients[key as keyof BurgerIngredients] === 0;
+  }
 
   return (
     <div>
+      <Modal>
+        <OrderSummary order={state} />
+      </Modal>
       <div className={Styles.Burger}>{ingredientsArray}</div>
-      <BuildControls ingredientsReducerDispatch={dispatch} />
+      <BuildControls
+        totalPrice={state.totalPrice.toFixed(2)}
+        ingredientsReducerDispatch={dispatch}
+        disabledInfo={disabledInfo}
+      />
     </div>
   );
 };
