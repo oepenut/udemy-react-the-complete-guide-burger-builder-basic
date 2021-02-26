@@ -9,10 +9,11 @@ type Props = {
   ingredientsReducerDispatch: React.Dispatch<{
     type: IngredientsReducerActions;
   }>;
+  isDisabledLess: boolean;
 };
 
 const index = (props: Props) => {
-  const { label, type, ingredientsReducerDispatch } = props;
+  const { label, type, ingredientsReducerDispatch, isDisabledLess } = props;
 
   let moreIngredient: any;
   let lessIngredient: any;
@@ -66,7 +67,10 @@ const index = (props: Props) => {
   return (
     <div className={Styles.BuildControl}>
       <div className={Styles.Label}>{label}</div>
-      <button className={Styles.Less} onClick={() => lessIngredient()}>
+      <button
+        className={Styles.Less}
+        onClick={() => lessIngredient()}
+        disabled={isDisabledLess}>
         -
       </button>
       <button className={Styles.More} onClick={() => moreIngredient()}>
