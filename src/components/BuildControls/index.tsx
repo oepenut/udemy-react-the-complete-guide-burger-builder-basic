@@ -1,5 +1,6 @@
 import React from 'react';
 import { IngredientsNames, IngredientsReducerActions } from 'utils/constanst';
+import { DisabledInfo } from 'types/types';
 import BuildControl from './BuildControl';
 import Styles from './BuildControls.module.css';
 
@@ -23,16 +24,25 @@ const BuildControls = [
 ];
 
 type Props = {
+  totalPrice: string;
   ingredientsReducerDispatch: React.Dispatch<{
     type: IngredientsReducerActions;
   }>;
+  disabledInfo: DisabledInfo;
 };
 
 const index = (props: Props) => {
-  const { ingredientsReducerDispatch } = props;
+  const { totalPrice, ingredientsReducerDispatch, disabledInfo } = props;
+
+  const isAvailableToOrder = !Object.values(disabledInfo).some(
+    (value) => !value
+  );
 
   return (
     <div className={Styles.BuildControls}>
+      <p>
+        <strong>Current price: ${totalPrice}</strong>
+      </p>
       {BuildControls.map((control) => {
         const { label, type } = control;
         return (
@@ -41,9 +51,13 @@ const index = (props: Props) => {
             label={label}
             type={type}
             ingredientsReducerDispatch={ingredientsReducerDispatch}
+            isDisabledLess={disabledInfo[type as keyof DisabledInfo]}
           />
         );
       })}
+      <button className={Styles.OrderButton} disabled={isAvailableToOrder}>
+        ORDER NOW
+      </button>
     </div>
   );
 };
