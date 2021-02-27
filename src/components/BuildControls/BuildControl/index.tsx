@@ -69,11 +69,11 @@ const index = (props: Props) => {
       <div className={Styles.Label}>{label}</div>
       <button
         className={Styles.Less}
-        onClick={() => lessIngredient()}
+        onClick={lessIngredient}
         disabled={isDisabledLess}>
         -
       </button>
-      <button className={Styles.More} onClick={() => moreIngredient()}>
+      <button className={Styles.More} onClick={moreIngredient}>
         +
       </button>
     </div>
