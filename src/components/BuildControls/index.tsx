@@ -29,10 +29,16 @@ type Props = {
     type: IngredientsReducerActions;
   }>;
   disabledInfo: DisabledInfo;
+  showModal: () => void;
 };
 
 const index = (props: Props) => {
-  const { totalPrice, ingredientsReducerDispatch, disabledInfo } = props;
+  const {
+    totalPrice,
+    ingredientsReducerDispatch,
+    disabledInfo,
+    showModal,
+  } = props;
 
   const isAvailableToOrder = !Object.values(disabledInfo).some(
     (value) => !value
@@ -55,7 +61,10 @@ const index = (props: Props) => {
           />
         );
       })}
-      <button className={Styles.OrderButton} disabled={isAvailableToOrder}>
+      <button
+        className={Styles.OrderButton}
+        disabled={isAvailableToOrder}
+        onClick={showModal}>
         ORDER NOW
       </button>
     </div>
