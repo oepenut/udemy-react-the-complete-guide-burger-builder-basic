@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import { IngredientsPrices, IngredientsReducerActions } from 'utils/constanst';
 import { BurgerIngredients, Order, DisabledInfo } from 'types/types';
 import Ingredient from 'components/Ingredient';
@@ -93,6 +93,23 @@ const Index = () => {
   };
 
   const [state, dispatch] = useReducer(ingredientsReducer, initialOrderState);
+  const [showModal, setShowModal] = useState(false);
+
+  const loadModal = () => {
+    setShowModal(true);
+  };
+
+  const hideModal = () => {
+    setShowModal(false);
+  };
+
+  const handleContinue = () => {
+    alert('continue');
+  };
+
+  const handleCancel = () => {
+    alert('cancel');
+  };
 
   const getProperty = <T, K extends keyof T>(
     object: T,
@@ -132,14 +149,19 @@ const Index = () => {
 
   return (
     <div>
-      <Modal>
-        <OrderSummary order={state} />
+      <Modal show={showModal} hideModal={hideModal}>
+        <OrderSummary
+          order={state}
+          continueClick={handleContinue}
+          cancelClick={handleCancel}
+        />
       </Modal>
       <div className={Styles.Burger}>{ingredientsArray}</div>
       <BuildControls
         totalPrice={state.totalPrice.toFixed(2)}
         ingredientsReducerDispatch={dispatch}
         disabledInfo={disabledInfo}
+        showModal={loadModal}
       />
     </div>
   );
