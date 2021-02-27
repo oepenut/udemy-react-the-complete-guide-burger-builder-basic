@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, Fragment } from 'react';
+import Toolbar from 'components/Navigation/Toolbar';
 
 type Props = {
   children: ReactNode;
@@ -7,7 +8,12 @@ type Props = {
 const index = (props: Props) => {
   const { children } = props;
 
-  return <div>{children}</div>;
+  return (
+    <Fragment>
+      <Toolbar />
+      <div>{children}</div>
+    </Fragment>
+  );
 };
 
 export default index;
