@@ -1,6 +1,6 @@
 .Toolbar {
   background-color: #703b09;
-  height: 56px;
+  height: 60px;
   position: fixed;
   left: 0;
   top: 0;
@@ -15,4 +15,22 @@
 
 .Toolbar nav {
   height: 100%;
+}
+
+.Logo {
+  background-color: white;
+  border-radius: 5px;
+  box-sizing: border-box;
+  height: 80%;
+  padding: 5px;
+}
+
+.Logo img {
+  height: 100%;
+}
+
+@media (max-width: 499px) {
+  .DesktopOnly {
+    display: none;
+  }
 }
